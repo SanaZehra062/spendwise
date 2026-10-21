@@ -1,0 +1,10 @@
+$kind: http-request
+description: ""
+url: http://localhost:5000/api/transactions/
+method: GET
+body:
+  type: json
+  content: '{"type":"income","category":"Salary","amount":50000,"date":"2026-10-01","note":"October salary"}'
+auth:
+  type: noauth
+order: 1000
