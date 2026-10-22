@@ -1,10 +1,22 @@
 $kind: http-request
 description: ""
-url: http://localhost:5000/api/transactions/
-method: GET
+url: "{{baseUrl}}/api/budgets"
+method: POST
 body:
   type: json
-  content: '{"type":"income","category":"Salary","amount":50000,"date":"2026-10-01","note":"October salary"}'
+  content: ' {"category":"Transport","limit":3000,"month":"2026-10"}'
 auth:
-  type: noauth
+  type: bearer
+  credentials:
+    token: "{{token}}"
+scripts:
+  - type: afterResponse
+    code: "const res = pm.response.json();\r
+
+      if (pm.response.code === 201) {\r
+
+      \  pm.collectionVariables.set(\"budgetId\", res._id);\r
+
+      }"
+    language: text/javascript
 order: 1000

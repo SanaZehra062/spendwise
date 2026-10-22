@@ -17,3 +17,14 @@ export const updateTransactionSchema = createTransactionSchema
   .refine((data) => Object.keys(data).length > 0, {
     message: "Provide at least one field to update",
   });
+  export const listQuerySchema = z.object({
+  month: z
+    .string()
+    .regex(/^\d{4}-(0[1-9]|1[0-2])$/, "Month must be in YYYY-MM format")
+    .optional(),
+  category: z.string().trim().min(1).max(50).optional(),
+  type: z.enum(["income", "expense"]).optional(),
+  search: z.string().trim().max(100).optional(),
+  page: z.coerce.number().int().min(1).default(1),
+  limit: z.coerce.number().int().min(1).max(50).default(10),
+});

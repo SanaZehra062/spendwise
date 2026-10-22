@@ -1,1 +1,11 @@
 $kind: collection
+variables:
+  - key: token
+    secret: true
+    disabled: false
+  - key: budgetId
+    value: ""
+    disabled: false
+  - key: baseUrl
+    value: ""
+    disabled: false

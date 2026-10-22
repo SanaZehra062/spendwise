@@ -7,10 +7,11 @@ import {
   deleteTransaction,
 } from "../controllers/transactionController.js";
 import { protect } from "../middleware/auth.js";
-import { validate } from "../middleware/validate.js";
+import { validate, validateQuery } from "../middleware/validate.js";
 import {
   createTransactionSchema,
   updateTransactionSchema,
+  listQuerySchema,
 } from "../validators/transactionSchemas.js";
 
 const router = Router();
@@ -19,7 +20,7 @@ router.use(protect);
 
 router
   .route("/")
-  .get(getTransactions)
+  .get(validateQuery(listQuerySchema), getTransactions)
   .post(validate(createTransactionSchema), createTransaction);
 
 router

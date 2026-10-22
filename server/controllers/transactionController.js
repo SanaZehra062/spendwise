@@ -1,6 +1,8 @@
 import Transaction from "../models/Transaction.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 
+const escapeRegex = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
 const notFound = (res) =>
   res.status(404).json({ message: "Transaction not found" });
 
@@ -13,13 +15,40 @@ export const createTransaction = asyncHandler(async (req, res) => {
   res.status(201).json({ transaction });
 });
 
-// GET /api/transactions
+// GET /api/transactions?month=&category=&type=&search=&page=&limit=
 export const getTransactions = asyncHandler(async (req, res) => {
-  const transactions = await Transaction.find({ user: req.user._id }).sort({
-    date: -1,
-    createdAt: -1,
+  const { month, category, type, search, page, limit } = req.validatedQuery;
+
+  const filter = { user: req.user._id };
+
+  if (type) filter.type = type;
+  if (category) filter.category = category;
+
+  if (month) {
+    const [y, m] = month.split("-").map(Number);
+    filter.date = {
+      $gte: new Date(Date.UTC(y, m - 1, 1)),
+      $lt: new Date(Date.UTC(y, m, 1)),
+    };
+  }
+
+  if (search) {
+    const rx = new RegExp(escapeRegex(search), "i");
+    filter.$or = [{ note: rx }, { category: rx }];
+  }
+
+  const [transactions, total] = await Promise.all([
+    Transaction.find(filter)
+      .sort({ date: -1, createdAt: -1 })
+      .skip((page - 1) * limit)
+      .limit(limit),
+    Transaction.countDocuments(filter),
+  ]);
+
+  res.json({
+    transactions,
+    pagination: { page, limit, total, totalPages: Math.ceil(total / limit) },
   });
-  res.json({ transactions });
 });
 
 // GET /api/transactions/:id
