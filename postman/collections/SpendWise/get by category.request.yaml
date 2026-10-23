@@ -1,0 +1,11 @@
+$kind: http-request
+description: ""
+url: "{{baseUrl}}/api/reports/export?type=income"
+method: GET
+queryParams:
+  type: income
+auth:
+  type: bearer
+  credentials:
+    token: "{{token}}"
+order: 3000
