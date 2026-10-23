@@ -1,0 +1,9 @@
+$kind: http-request
+description: ""
+url: "{{baseUrl}}/api/reports/monthly"
+method: GET
+auth:
+  type: bearer
+  credentials:
+    token: "{{token}}"
+order: 4000

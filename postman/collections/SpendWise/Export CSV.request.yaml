@@ -1,0 +1,9 @@
+$kind: http-request
+description: ""
+url: "{{baseUrl}}/api/reports/export"
+method: GET
+auth:
+  type: bearer
+  credentials:
+    token: "{{token}}"
+order: 5000

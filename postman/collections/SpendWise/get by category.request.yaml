@@ -1,9 +1,7 @@
 $kind: http-request
 description: ""
-url: "{{baseUrl}}/api/reports/export?type=income"
+url: "{{baseUrl}}/api/reports/by-category"
 method: GET
-queryParams:
-  type: income
 auth:
   type: bearer
   credentials:

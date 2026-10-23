@@ -4,7 +4,7 @@ url: "{{baseUrl}}/api/budgets"
 method: POST
 body:
   type: json
-  content: ' {"category":"Transport","limit":3000,"month":"2026-10"}'
+  content: ' {"category":"Food","limit":5000,"month":"2026-09"}'
 auth:
   type: bearer
   credentials:
