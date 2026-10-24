@@ -17,7 +17,7 @@ export const updateTransactionSchema = createTransactionSchema
   .refine((data) => Object.keys(data).length > 0, {
     message: "Provide at least one field to update",
   });
-  export const listQuerySchema = z.object({
+export const listQuerySchema = z.object({
   month: z
     .string()
     .regex(/^\d{4}-(0[1-9]|1[0-2])$/, "Month must be in YYYY-MM format")
