@@ -1,5 +1,6 @@
 import { NavLink, Outlet } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import BudgetWarnings from "./BudgetWarnings";
 
 const linkStyle = ({ isActive }) => ({
   marginRight: 16,
@@ -32,6 +33,7 @@ export default function Layout() {
         <button onClick={logout}>Log out</button>
       </nav>
       <main style={{ maxWidth: 900, margin: "0 auto", padding: 16 }}>
+        <BudgetWarnings />
         <Outlet />
       </main>
     </div>

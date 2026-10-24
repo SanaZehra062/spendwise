@@ -3,6 +3,7 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Home from "./pages/Home";
 import Transactions from "./pages/Transactions";
+import Budgets from "./pages/Budgets";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Layout from "./components/Layout";
 
@@ -20,6 +21,7 @@ export default function App() {
       >
         <Route path="/" element={<Home />} />
         <Route path="/transactions" element={<Transactions />} />
+        <Route path="/budgets" element={<Budgets />} />
       </Route>
     </Routes>
   );

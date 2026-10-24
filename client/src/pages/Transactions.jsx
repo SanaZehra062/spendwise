@@ -1,22 +1,17 @@
 import { useEffect, useState } from "react";
 import api from "../api";
+import { CATEGORIES } from "../constants";
+import TransactionForm from "../components/TransactionForm";
 
 const LIMIT = 10;
-const CATEGORIES = [
-  "Food",
-  "Transport",
-  "Shopping",
-  "Bills",
-  "Entertainment",
-  "Rent",
-  "Salary",
-];
 
 export default function Transactions() {
   const [filters, setFilters] = useState({ month: "", type: "", category: "" });
   const [searchInput, setSearchInput] = useState("");
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
+  const [reloadKey, setReloadKey] = useState(0);
+  const [formState, setFormState] = useState(null); // null | { initial }
   const [data, setData] = useState({ transactions: [], pagination: null });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -30,7 +25,7 @@ export default function Transactions() {
     return () => clearTimeout(t);
   }, [searchInput]);
 
-  // Fetch the list whenever the page, filters or search change
+  // Fetch the list whenever the page, filters, search or reloadKey change
   useEffect(() => {
     let cancelled = false;
 
@@ -58,7 +53,7 @@ export default function Transactions() {
     return () => {
       cancelled = true;
     };
-  }, [page, filters, search]);
+  }, [page, filters, search, reloadKey]);
 
   const updateFilter = (key, value) => {
     setFilters((f) => ({ ...f, [key]: value }));
@@ -72,11 +67,51 @@ export default function Transactions() {
     setPage(1);
   };
 
+  const handleSaved = () => {
+    setFormState(null);
+    setReloadKey((k) => k + 1);
+  };
+
+  const handleDelete = async (t) => {
+    if (!window.confirm(`Delete this ${t.category} transaction?`)) return;
+    try {
+      await api.delete(`/transactions/${t._id}`);
+      // If that was the last row on this page, go back one page
+      if (data.transactions.length === 1 && page > 1) {
+        setPage((p) => p - 1);
+      } else {
+        setReloadKey((k) => k + 1);
+      }
+    } catch (err) {
+      setError(err.response?.data?.message || "Could not delete transaction");
+    }
+  };
+
   const { transactions, pagination } = data;
 
   return (
     <div>
-      <h2>Transactions</h2>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <h2>Transactions</h2>
+        <button onClick={() => setFormState({ initial: null })}>
+          + Add transaction
+        </button>
+      </div>
+
+      {formState && (
+        <TransactionForm
+          key={formState.initial?._id || "new"}
+          initial={formState.initial}
+          onSaved={handleSaved}
+          onCancel={() => setFormState(null)}
+        />
+      )}
 
       <div
         style={{
@@ -137,6 +172,7 @@ export default function Transactions() {
                 <th style={{ padding: 8 }}>Category</th>
                 <th style={{ padding: 8 }}>Amount</th>
                 <th style={{ padding: 8 }}>Note</th>
+                <th style={{ padding: 8 }}>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -155,6 +191,20 @@ export default function Transactions() {
                     {t.amount.toLocaleString()}
                   </td>
                   <td style={{ padding: 8 }}>{t.note}</td>
+                  <td style={{ padding: 8, whiteSpace: "nowrap" }}>
+                    <button
+                      onClick={() => setFormState({ initial: t })}
+                      style={{ marginRight: 8 }}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => handleDelete(t)}
+                      style={{ background: "#dc2626" }}
+                    >
+                      Delete
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>
