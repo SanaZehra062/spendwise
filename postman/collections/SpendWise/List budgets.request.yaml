@@ -1,0 +1,11 @@
+$kind: http-request
+description: ""
+url: "{{baseUrl}}/api/budgets?month=2026-10"
+method: GET
+queryParams:
+  month: 2026-10
+auth:
+  type: bearer
+  credentials:
+    token: "{{token}}"
+order: 14000

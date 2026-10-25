@@ -9,3 +9,6 @@ variables:
   - key: baseUrl
     value: ""
     disabled: false
+  - key: transactionId
+    value: ""
+    disabled: false

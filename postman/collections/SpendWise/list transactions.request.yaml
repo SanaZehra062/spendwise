@@ -1,0 +1,13 @@
+$kind: http-request
+description: ""
+url: "{{baseUrl}}/api/transactions?month=2026-10&page=1&limit=10"
+method: GET
+queryParams:
+  month: 2026-10
+  page: "1"
+  limit: "10"
+auth:
+  type: bearer
+  credentials:
+    token: "{{token}}"
+order: 10000

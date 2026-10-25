@@ -1,0 +1,24 @@
+$kind: http-request
+description: ""
+url: "{{baseUrl}}/api/auth/login"
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \  \"email\": \"postman.test@example.com\",\r
+
+    \  \"password\": \"Test1234\"\r
+
+    }"
+scripts:
+  - type: afterResponse
+    code: "const res = pm.response.json();\r
+
+      if (pm.response.code === 200 && res.token) {\r
+
+      \  pm.collectionVariables.set(\"token\", res.token);\r
+
+      }"
+    language: text/javascript
+order: 7000

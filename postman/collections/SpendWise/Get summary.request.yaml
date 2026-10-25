@@ -1,5 +1,9 @@
 $kind: http-request
 description: ""
-url: ""
+url: "{{baseUrl}}/api/reports/summary"
 method: GET
+auth:
+  type: bearer
+  credentials:
+    token: "{{token}}"
 order: 2000

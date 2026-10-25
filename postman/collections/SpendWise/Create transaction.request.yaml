@@ -1,0 +1,36 @@
+$kind: http-request
+description: ""
+url: "{{baseUrl}}/api/transactions"
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \  \"type\": \"expense\",\r
+
+    \  \"category\": \"Food\",\r
+
+    \  \"amount\": 500,\r
+
+    \  \"date\": \"2026-10-25\",\r
+
+    \  \"note\": \"postman test\"\r
+
+    }"
+auth:
+  type: bearer
+  credentials:
+    token: "{{token}}"
+scripts:
+  - type: afterResponse
+    code: "const res = pm.response.json();\r
+
+      if (pm.response.code === 201) {\r
+
+      \  const t = res.transaction || res;\r
+
+      \  pm.collectionVariables.set(\"transactionId\", t._id);\r
+
+      }"
+    language: text/javascript
+order: 9000

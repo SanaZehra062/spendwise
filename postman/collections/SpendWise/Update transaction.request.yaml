@@ -1,0 +1,12 @@
+$kind: http-request
+description: ""
+url: "{{baseUrl}}/api/transactions/{{transactionId}}"
+method: PATCH
+body:
+  type: json
+  content: "{\r\n  \"amount\": 700\r\n}"
+auth:
+  type: bearer
+  credentials:
+    token: "{{token}}"
+order: 12000

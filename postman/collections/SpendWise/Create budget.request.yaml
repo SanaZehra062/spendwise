@@ -4,7 +4,7 @@ url: "{{baseUrl}}/api/budgets"
 method: POST
 body:
   type: json
-  content: ' {"category":"Food","limit":5000,"month":"2026-09"}'
+  content: ' {"category":"Food","limit":5000,"month":"2026-08"}'
 auth:
   type: bearer
   credentials:
@@ -15,7 +15,9 @@ scripts:
 
       if (pm.response.code === 201) {\r
 
-      \  pm.collectionVariables.set(\"budgetId\", res._id);\r
+      \  const b = res.budget || res;\r
+
+      \  pm.collectionVariables.set(\"budgetId\", b._id);\r
 
       }"
     language: text/javascript

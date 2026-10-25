@@ -1,0 +1,12 @@
+$kind: http-request
+description: ""
+url: "{{baseUrl}}/api/budgets/{{budgetId}}"
+method: PATCH
+body:
+  type: json
+  content: "{\r\n  \"limit\": 6000\r\n}"
+auth:
+  type: bearer
+  credentials:
+    token: "{{token}}"
+order: 15000
