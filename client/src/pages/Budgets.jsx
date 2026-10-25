@@ -73,27 +73,19 @@ export default function Budgets() {
 
   return (
     <div>
-      <h2>Budgets</h2>
+      <div className="page-head">
+        <h2>Budgets</h2>
+        <div className="toolbar">
+          <input
+            type="month"
+            value={month}
+            onChange={(e) => setMonth(e.target.value)}
+          />
+        </div>
+      </div>
 
-      <label>Month</label>
-      <input
-        type="month"
-        value={month}
-        onChange={(e) => setMonth(e.target.value)}
-        style={{ maxWidth: 220 }}
-      />
-
-      <form
-        onSubmit={handleSubmit}
-        style={{
-          background: "#fff",
-          border: "1px solid #e5e7eb",
-          borderRadius: 8,
-          padding: 16,
-          margin: "16px 0",
-        }}
-      >
-        <h3 style={{ marginTop: 0 }}>Set a budget</h3>
+      <form onSubmit={handleSubmit} className="card" style={{ marginBottom: 16 }}>
+        <h3>Set a budget</h3>
 
         <label>Category</label>
         <select value={category} onChange={(e) => setCategory(e.target.value)}>
@@ -113,91 +105,62 @@ export default function Budgets() {
         />
 
         {formErrors.map((msg, i) => (
-          <p key={i} style={{ color: "red" }}>
+          <p key={i} className="field-error">
             {msg}
           </p>
         ))}
 
-        <button disabled={saving}>Save budget</button>
+        <button disabled={saving} style={{ marginTop: 12 }}>
+          Save budget
+        </button>
       </form>
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      {loading && <p>Loading...</p>}
+      {error && <p className="field-error">{error}</p>}
+      {loading && <p className="muted">Loading...</p>}
       {!loading && !error && items.length === 0 && (
-        <p>No budgets for this month.</p>
+        <p className="muted">No budgets for this month.</p>
       )}
 
-      {items.map((b) => {
-        const status = statusOf(b.percent);
-        return (
-          <div
-            key={b._id}
-            style={{
-              background: "#fff",
-              border: "1px solid #e5e7eb",
-              borderRadius: 8,
-              padding: 12,
-              marginBottom: 12,
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                flexWrap: "wrap",
-                gap: 8,
-              }}
-            >
-              <strong>{b.category}</strong>
-              <span style={{ color: status.color }}>{status.label}</span>
-            </div>
+      <div className="stack">
+        {items.map((b) => {
+          const status = statusOf(b.percent);
+          return (
+            <div key={b._id} className="card">
+              <div className="budget-row">
+                <strong>{b.category}</strong>
+                <span style={{ color: status.color, fontWeight: 500 }}>
+                  {status.label}
+                </span>
+              </div>
 
-            <div
-              style={{
-                background: "#e5e7eb",
-                borderRadius: 4,
-                height: 10,
-                margin: "8px 0",
-              }}
-            >
-              <div
-                style={{
-                  width: `${Math.min(b.percent, 100)}%`,
-                  background: status.color,
-                  height: 10,
-                  borderRadius: 4,
-                }}
-              />
-            </div>
+              <div className="progress">
+                <div
+                  className="progress-bar"
+                  style={{
+                    width: `${Math.min(b.percent, 100)}%`,
+                    background: status.color,
+                  }}
+                />
+              </div>
 
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                flexWrap: "wrap",
-                gap: 8,
-              }}
-            >
-              <span>
-                {b.spent.toLocaleString()} of {b.limit.toLocaleString()} (
-                {Math.floor(b.percent)}%)
-              </span>
-              <span>
-                <button onClick={() => startEdit(b)} style={{ marginRight: 8 }}>
-                  Edit
-                </button>
-                <button
-                  onClick={() => handleDelete(b)}
-                  style={{ background: "#dc2626" }}
-                >
-                  Delete
-                </button>
-              </span>
+              <div className="budget-row">
+                <span className="muted">
+                  {b.spent.toLocaleString()} of {b.limit.toLocaleString()} (
+                  {Math.floor(b.percent)}%)
+                </span>
+                <span className="row-actions">
+                  <button className="btn-ghost btn-sm" onClick={() => startEdit(b)}>
+                    Edit
+                  </button>
+                  <button className="btn-danger btn-sm" onClick={() => handleDelete(b)}>
+                    Delete
+                  </button>
+                </span>
+              </div>
             </div>
-          </div>
-        );
-      })}
+          );
+        })}
+      </div>
     </div>
   );
 }

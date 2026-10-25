@@ -65,22 +65,15 @@ export default function TransactionForm({ initial, onSaved, onCancel }) {
     }
   };
 
-  const err = (msg) => msg && <p style={{ color: "red", margin: 0 }}>{msg}</p>;
+  const fieldError = (msg) => msg && <p className="field-error">{msg}</p>;
 
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      style={{
-        background: "#fff",
-        border: "1px solid #e5e7eb",
-        borderRadius: 8,
-        padding: 16,
-        marginBottom: 16,
-      }}
+      className="card"
+      style={{ marginBottom: 16 }}
     >
-      <h3 style={{ marginTop: 0 }}>
-        {initial ? "Edit transaction" : "Add transaction"}
-      </h3>
+      <h3>{initial ? "Edit transaction" : "Add transaction"}</h3>
 
       <label>Type</label>
       <select {...register("type")}>
@@ -96,35 +89,31 @@ export default function TransactionForm({ initial, onSaved, onCancel }) {
           </option>
         ))}
       </select>
-      {err(errors.category?.message)}
+      {fieldError(errors.category?.message)}
 
       <label>Amount</label>
       <input type="number" step="any" {...register("amount")} />
-      {err(errors.amount?.message)}
+      {fieldError(errors.amount?.message)}
 
       <label>Date</label>
       <input type="date" {...register("date")} />
-      {err(errors.date?.message)}
+      {fieldError(errors.date?.message)}
 
       <label>Note (optional)</label>
       <input {...register("note")} />
-      {err(errors.note?.message)}
+      {fieldError(errors.note?.message)}
 
       {serverErrors.map((msg, i) => (
-        <p key={i} style={{ color: "red" }}>
+        <p key={i} className="field-error">
           {msg}
         </p>
       ))}
 
-      <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
+      <div className="toolbar" style={{ marginTop: 12 }}>
         <button disabled={isSubmitting}>
           {initial ? "Save changes" : "Add"}
         </button>
-        <button
-          type="button"
-          onClick={onCancel}
-          style={{ background: "#6b7280" }}
-        >
+        <button type="button" className="btn-ghost" onClick={onCancel}>
           Cancel
         </button>
       </div>

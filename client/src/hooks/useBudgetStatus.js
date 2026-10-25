@@ -2,9 +2,9 @@ import { useCallback, useEffect, useState } from "react";
 import api from "../api";
 
 export const statusOf = (percent) => {
-  if (percent >= 100) return { color: "#dc2626", label: "Over budget" };
-  if (percent >= 80) return { color: "#d97706", label: "80% used" };
-  return { color: "#16a34a", label: "On track" };
+  if (percent >= 100) return { color: "#b4443a", label: "Over budget" };
+  if (percent >= 80) return { color: "#b7791f", label: "80% used" };
+  return { color: "#1a6b52", label: "On track" };
 };
 
 // Loads the budgets of a month together with how much was spent per category.

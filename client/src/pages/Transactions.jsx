@@ -91,13 +91,7 @@ export default function Transactions() {
 
   return (
     <div>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
+      <div className="page-head">
         <h2>Transactions</h2>
         <button onClick={() => setFormState({ initial: null })}>
           + Add transaction
@@ -113,129 +107,121 @@ export default function Transactions() {
         />
       )}
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
-          gap: 8,
-          marginBottom: 12,
-        }}
-      >
-        <input
-          type="month"
-          value={filters.month}
-          onChange={(e) => updateFilter("month", e.target.value)}
-        />
-        <select
-          value={filters.type}
-          onChange={(e) => updateFilter("type", e.target.value)}
-        >
-          <option value="">All types</option>
-          <option value="income">Income</option>
-          <option value="expense">Expense</option>
-        </select>
-        <select
-          value={filters.category}
-          onChange={(e) => updateFilter("category", e.target.value)}
-        >
-          <option value="">All categories</option>
-          {CATEGORIES.map((c) => (
-            <option key={c} value={c}>
-              {c}
-            </option>
-          ))}
-        </select>
-        <input
-          placeholder="Search note or category"
-          value={searchInput}
-          onChange={(e) => setSearchInput(e.target.value)}
-        />
-      </div>
-      <button onClick={clearAll} style={{ marginBottom: 12 }}>
-        Clear filters
-      </button>
-
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      {loading && <p>Loading...</p>}
-
-      {!loading && !error && transactions.length === 0 && (
-        <p>No transactions found.</p>
-      )}
-
-      {transactions.length > 0 && (
-        <div style={{ overflowX: "auto" }}>
-          <table style={{ width: "100%", borderCollapse: "collapse" }}>
-            <thead>
-              <tr style={{ textAlign: "left", borderBottom: "2px solid #e5e7eb" }}>
-                <th style={{ padding: 8 }}>Date</th>
-                <th style={{ padding: 8 }}>Type</th>
-                <th style={{ padding: 8 }}>Category</th>
-                <th style={{ padding: 8 }}>Amount</th>
-                <th style={{ padding: 8 }}>Note</th>
-                <th style={{ padding: 8 }}>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {transactions.map((t) => (
-                <tr key={t._id} style={{ borderBottom: "1px solid #e5e7eb" }}>
-                  <td style={{ padding: 8 }}>{t.date.slice(0, 10)}</td>
-                  <td style={{ padding: 8 }}>{t.type}</td>
-                  <td style={{ padding: 8 }}>{t.category}</td>
-                  <td
-                    style={{
-                      padding: 8,
-                      color: t.type === "income" ? "#16a34a" : "#dc2626",
-                    }}
-                  >
-                    {t.type === "income" ? "+" : "-"}
-                    {t.amount.toLocaleString()}
-                  </td>
-                  <td style={{ padding: 8 }}>{t.note}</td>
-                  <td style={{ padding: 8, whiteSpace: "nowrap" }}>
-                    <button
-                      onClick={() => setFormState({ initial: t })}
-                      style={{ marginRight: 8 }}
-                    >
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => handleDelete(t)}
-                      style={{ background: "#dc2626" }}
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-
-      {pagination && pagination.totalPages > 0 && (
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 12,
-            marginTop: 16,
-          }}
-        >
-          <button disabled={page <= 1} onClick={() => setPage((p) => p - 1)}>
-            Previous
-          </button>
-          <span>
-            Page {pagination.page} of {pagination.totalPages} ({pagination.total}{" "}
-            total)
-          </span>
-          <button
-            disabled={page >= pagination.totalPages}
-            onClick={() => setPage((p) => p + 1)}
+      <div className="card">
+        <div className="filters">
+          <input
+            type="month"
+            value={filters.month}
+            onChange={(e) => updateFilter("month", e.target.value)}
+          />
+          <select
+            value={filters.type}
+            onChange={(e) => updateFilter("type", e.target.value)}
           >
-            Next
-          </button>
+            <option value="">All types</option>
+            <option value="income">Income</option>
+            <option value="expense">Expense</option>
+          </select>
+          <select
+            value={filters.category}
+            onChange={(e) => updateFilter("category", e.target.value)}
+          >
+            <option value="">All categories</option>
+            {CATEGORIES.map((c) => (
+              <option key={c} value={c}>
+                {c}
+              </option>
+            ))}
+          </select>
+          <input
+            placeholder="Search note or category"
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
+          />
         </div>
-      )}
+        <button className="btn-ghost btn-sm" onClick={clearAll}>
+          Clear filters
+        </button>
+
+        {error && <p className="field-error">{error}</p>}
+        {loading && <p className="muted">Loading...</p>}
+
+        {!loading && !error && transactions.length === 0 && (
+          <p className="muted">No transactions found.</p>
+        )}
+
+        {transactions.length > 0 && (
+          <div className="table-wrap">
+            <table className="data">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Type</th>
+                  <th>Category</th>
+                  <th>Amount</th>
+                  <th>Note</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {transactions.map((t) => (
+                  <tr key={t._id}>
+                    <td>{t.date.slice(0, 10)}</td>
+                    <td>
+                      <span className={`badge badge-${t.type}`}>{t.type}</span>
+                    </td>
+                    <td>{t.category}</td>
+                    <td className={t.type === "income" ? "amt-income" : "amt-expense"}>
+                      {t.type === "income" ? "+" : "-"}
+                      {t.amount.toLocaleString()}
+                    </td>
+                    <td className="note">{t.note}</td>
+                    <td>
+                      <div className="row-actions">
+                        <button
+                          className="btn-ghost btn-sm"
+                          onClick={() => setFormState({ initial: t })}
+                        >
+                          Edit
+                        </button>
+                        <button
+                          className="btn-danger btn-sm"
+                          onClick={() => handleDelete(t)}
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+
+        {pagination && pagination.totalPages > 0 && (
+          <div className="pager">
+            <button
+              className="btn-ghost btn-sm"
+              disabled={page <= 1}
+              onClick={() => setPage((p) => p - 1)}
+            >
+              Previous
+            </button>
+            <span className="muted">
+              Page {pagination.page} of {pagination.totalPages} (
+              {pagination.total} total)
+            </span>
+            <button
+              className="btn-ghost btn-sm"
+              disabled={page >= pagination.totalPages}
+              onClick={() => setPage((p) => p + 1)}
+            >
+              Next
+            </button>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

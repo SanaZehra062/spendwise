@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import AuthLayout from "../components/AuthLayout";
 
 // Keep these rules the same as server/validators/authSchemas.js
 const schema = z.object({
@@ -44,31 +45,32 @@ export default function Signup() {
   };
 
   return (
-    <div style={{ maxWidth: 380, margin: "60px auto", padding: 16 }}>
-      <h2>Sign up</h2>
+    <AuthLayout title="Create your account" subtitle="It takes less than a minute.">
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div>
-          <input placeholder="Name" {...register("name")} />
-          {errors.name && <p style={{ color: "red" }}>{errors.name.message}</p>}
-        </div>
-        <div>
-          <input placeholder="Email" {...register("email")} />
-          {errors.email && <p style={{ color: "red" }}>{errors.email.message}</p>}
-        </div>
-        <div>
-          <input type="password" placeholder="Password" {...register("password")} />
-          {errors.password && <p style={{ color: "red" }}>{errors.password.message}</p>}
-        </div>
+        <label>Name</label>
+        <input placeholder="Your name" {...register("name")} />
+        {errors.name && <p className="field-error">{errors.name.message}</p>}
+
+        <label>Email</label>
+        <input placeholder="you@example.com" {...register("email")} />
+        {errors.email && <p className="field-error">{errors.email.message}</p>}
+
+        <label>Password</label>
+        <input type="password" placeholder="At least 8 characters" {...register("password")} />
+        {errors.password && (
+          <p className="field-error">{errors.password.message}</p>
+        )}
+
         {serverErrors.map((msg, i) => (
-          <p key={i} style={{ color: "red" }}>
+          <p key={i} className="field-error">
             {msg}
           </p>
         ))}
         <button disabled={isSubmitting}>Create account</button>
       </form>
-      <p>
+      <p style={{ marginTop: 16 }}>
         Already have an account? <Link to="/login">Log in</Link>
       </p>
-    </div>
+    </AuthLayout>
   );
 }

@@ -17,20 +17,12 @@ export default function BudgetWarnings() {
         return (
           <div
             key={i._id}
-            style={{
-              background: over ? "#fee2e2" : "#fef3c7",
-              border: `1px solid ${over ? "#dc2626" : "#d97706"}`,
-              borderRadius: 6,
-              padding: "8px 12px",
-              marginBottom: 8,
-              color: "#1f2937",
-            }}
+            className={`banner ${over ? "banner-over" : "banner-warn"}`}
           >
             <strong>{i.category}</strong>:{" "}
             {over ? "over budget" : "80% of budget used"} (
             {i.spent.toLocaleString()} of {i.limit.toLocaleString()},{" "}
-            {Math.floor(i.percent)}%){" "}
-            <Link to="/budgets">View budgets</Link>
+            {Math.floor(i.percent)}%) <Link to="/budgets">View budgets</Link>
           </div>
         );
       })}

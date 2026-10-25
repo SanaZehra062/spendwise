@@ -15,14 +15,7 @@ import {
 import api from "../api";
 import { currentMonth } from "../constants";
 
-const COLORS = ["#2563eb", "#16a34a", "#d97706", "#dc2626", "#7c3aed", "#0891b2", "#db2777"];
-
-const card = {
-  background: "#fff",
-  border: "1px solid #e5e7eb",
-  borderRadius: 8,
-  padding: 16,
-};
+const COLORS = ["#14523f", "#b8935a", "#1a6b52", "#d9c08f", "#0a2e24", "#7a9e8e", "#8c6a35"];
 
 export default function Home() {
   const [month, setMonth] = useState(currentMonth()); // empty = all time
@@ -109,81 +102,51 @@ export default function Home() {
 
   return (
     <div>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          flexWrap: "wrap",
-          gap: 8,
-        }}
-      >
+      <div className="page-head">
         <h2>Dashboard</h2>
-        <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+        <div className="toolbar">
           <input
             type="month"
             value={month}
             onChange={(e) => setMonth(e.target.value)}
-            style={{ margin: 0 }}
           />
-          <button onClick={() => setMonth("")}>All time</button>
+          <button className="btn-ghost" onClick={() => setMonth("")}>
+            All time
+          </button>
           <button onClick={exportCsv} disabled={exporting}>
             {exporting ? "Exporting..." : "Export CSV"}
           </button>
         </div>
       </div>
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      {error && <p className="field-error">{error}</p>}
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-          gap: 12,
-          margin: "16px 0",
-        }}
-      >
-        <div style={card}>
-          <div style={{ color: "#6b7280" }}>Balance ({label})</div>
-          <div
-            style={{
-              fontSize: 24,
-              fontWeight: "bold",
-              color: summary.balance < 0 ? "#dc2626" : "#1f2937",
-            }}
-          >
+      <div className="grid-stats">
+        <div className="card">
+          <div className="stat-label">Balance ({label})</div>
+          <div className={`stat-value ${summary.balance < 0 ? "neg" : ""}`}>
             {fmt(summary.balance)}
           </div>
         </div>
-        <div style={card}>
-          <div style={{ color: "#6b7280" }}>Income</div>
-          <div style={{ fontSize: 24, fontWeight: "bold", color: "#16a34a" }}>
-            {fmt(summary.income)}
-          </div>
+        <div className="card">
+          <div className="stat-label">Income</div>
+          <div className="stat-value pos">{fmt(summary.income)}</div>
         </div>
-        <div style={card}>
-          <div style={{ color: "#6b7280" }}>Expense</div>
-          <div style={{ fontSize: 24, fontWeight: "bold", color: "#dc2626" }}>
-            {fmt(summary.expense)}
-          </div>
+        <div className="card">
+          <div className="stat-label">Expense</div>
+          <div className="stat-value neg">{fmt(summary.expense)}</div>
         </div>
       </div>
 
-      {loading && <p>Loading...</p>}
+      {loading && <p className="muted">Loading...</p>}
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-          gap: 12,
-        }}
-      >
-        <div style={card}>
-          <h3 style={{ marginTop: 0 }}>Spending by category ({label})</h3>
+      <div className="grid-charts">
+        <div className="card">
+          <h3>Spending by category ({label})</h3>
           {byCategory.length === 0 ? (
-            <p>No expenses for this period.</p>
+            <p className="muted">No expenses for this period.</p>
           ) : (
-            <div style={{ width: "100%", height: 280 }}>
+            <div className="chart-box">
               <ResponsiveContainer>
                 <PieChart>
                   <Pie
@@ -204,21 +167,21 @@ export default function Home() {
           )}
         </div>
 
-        <div style={card}>
-          <h3 style={{ marginTop: 0 }}>Last 6 months</h3>
+        <div className="card">
+          <h3>Last 6 months</h3>
           {monthly.length === 0 ? (
-            <p>No data yet.</p>
+            <p className="muted">No data yet.</p>
           ) : (
-            <div style={{ width: "100%", height: 280 }}>
+            <div className="chart-box">
               <ResponsiveContainer>
                 <BarChart data={monthly}>
-                  <CartesianGrid strokeDasharray="3 3" />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#efe6cf" />
                   <XAxis dataKey="month" />
                   <YAxis />
                   <Tooltip formatter={(v) => fmt(v)} />
                   <Legend />
-                  <Bar dataKey="income" fill="#16a34a" />
-                  <Bar dataKey="expense" fill="#dc2626" />
+                  <Bar dataKey="income" fill="#1a6b52" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="expense" fill="#b8935a" radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>

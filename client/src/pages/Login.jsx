@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import AuthLayout from "../components/AuthLayout";
 
 const schema = z.object({
   email: z.string().email("Enter a valid email"),
@@ -31,23 +32,24 @@ export default function Login() {
   };
 
   return (
-    <div style={{ maxWidth: 380, margin: "60px auto", padding: 16 }}>
-      <h2>Log in</h2>
+    <AuthLayout title="Welcome back" subtitle="Log in to see your spending.">
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div>
-          <input placeholder="Email" {...register("email")} />
-          {errors.email && <p style={{ color: "red" }}>{errors.email.message}</p>}
-        </div>
-        <div>
-          <input type="password" placeholder="Password" {...register("password")} />
-          {errors.password && <p style={{ color: "red" }}>{errors.password.message}</p>}
-        </div>
-        {serverError && <p style={{ color: "red" }}>{serverError}</p>}
+        <label>Email</label>
+        <input placeholder="you@example.com" {...register("email")} />
+        {errors.email && <p className="field-error">{errors.email.message}</p>}
+
+        <label>Password</label>
+        <input type="password" placeholder="Your password" {...register("password")} />
+        {errors.password && (
+          <p className="field-error">{errors.password.message}</p>
+        )}
+
+        {serverError && <p className="field-error">{serverError}</p>}
         <button disabled={isSubmitting}>Log in</button>
       </form>
-      <p>
+      <p style={{ marginTop: 16 }}>
         Don't have an account? <Link to="/signup">Sign up</Link>
       </p>
-    </div>
+    </AuthLayout>
   );
 }
